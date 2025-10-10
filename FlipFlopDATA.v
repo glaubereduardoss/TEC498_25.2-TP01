@@ -17,6 +17,7 @@ end
 
 //<=: Este é o operador de Atribuição Não-Bloqueante (Non-Blocking Assignment).
 
-//    assign nQ = ~Q; Para cao o uso do Q negado;
+assign nQ = ~Q; //Para cao o uso do Q negado;
 
 endmodule
+
