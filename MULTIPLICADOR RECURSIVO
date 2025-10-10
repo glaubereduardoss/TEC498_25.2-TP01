@@ -1,0 +1,160 @@
+module MultiplicadorRECURSIVOTESTE (
+    input [7:0] A, B,
+    input CLK, START, 
+    output [7:0] RESULT,
+);
+
+    wire [7:0] regA_out, regB_out, regR_out;
+    wire [7:0] soma_out, sub_out;
+    wire carry_soma, carry_sub, enable;
+
+    // Registradores
+    Registrador8BIT_PALAVRA_A palavraA(.D(A), .CLK(START), .Q(regA_out));
+	 
+	 
+    Registrador8BIT_PALAVRA_B palavrab(.D(sub_out), .CLK(CLK), .Q(regB_out));
+	 
+	 
+    Registrador8BIT_PALAVRA_ACUMULADOR acumulando(.D(soma_out), .CLK(CLK), .Q(regR_out));
+
+    //SOMA = ACUMULADOR SOMADO COM O VALOR FIXO DO "A", "B" VEZES.
+    Somador8 somador(regR_out, regA_out, 1'b0, soma_out, carry_soma);
+
+    //SUBTRAÇÃO = SUBTRAINDO O B A CADA VEZ QUE O VALOR DE "A" É SOMADO COM O ACUMULADOR.
+    Subtrator8 subtrator(regB_out, 8'b00000001, 1'b0, sub_out, carry_sub);
+	 
+	 //FALTA DETECTOR DE ZERO...
+	 //MULTIPLEXADORES
+	 //UNIDADE DE CONTROLE
+
+    // Saída final
+    and(RESULT[0], regR_out[0]);
+    and(RESULT[1], regR_out[1]);
+    and(RESULT[2], regR_out[2]);
+    and(RESULT[3], regR_out[3]);
+    and(RESULT[4], regR_out[4]);
+    and(RESULT[5], regR_out[5]);
+    and(RESULT[6], regR_out[6]);
+    and(RESULT[7], regR_out[7]);
+
+endmodule
+
+module Registrador8BIT_PALAVRA_B (
+    input  wire [7:0] D,      // Entrada de dados de 8 bits
+    input  wire       CLK,    // Sinal de clock (compartilhado)
+    output wire [7:0] Q,      // Saída registrada de 8 bits
+    output wire [7:0] nQ      // Saída invertida de 8 bits
+);
+
+    // Instanciando 8 vezes o módulo FlipFlopDATA no formato solicitado.
+    FlipFlopDATA ff_bit0(D(D[0]), CLK(CLK), Q(Q[0]), nQ(nQ[0]));
+    FlipFlopDATA ff_bit1(D(D[1]), CLK(CLK), Q(Q[1]), nQ(nQ[1]));
+    FlipFlopDATA ff_bit2(D(D[2]), CLK(CLK), Q(Q[2]), nQ(nQ[2]));
+    FlipFlopDATA ff_bit3(D(D[3]), CLK(CLK), Q(Q[3]), nQ(nQ[3]));
+    FlipFlopDATA ff_bit4(D(D[4]), CLK(CLK), Q(Q[4]), nQ(nQ[4]));
+    FlipFlopDATA ff_bit5(D(D[5]), CLK(CLK), Q(Q[5]), nQ(nQ[5]));
+    FlipFlopDATA ff_bit6(D(D[6]), CLK(CLK), Q(Q[6]), nQ(nQ[6]));
+    FlipFlopDATA ff_bit7(D(D[7]), CLK(CLK), Q(Q[7]), nQ(nQ[7]));
+
+endmodule
+
+module Registrador8BIT_PALAVRA_A (
+    input  wire [7:0] D,      // Entrada de dados de 8 bits
+    input  wire       CLK,    // Sinal de clock (compartilhado)
+    output wire [7:0] Q,      // Saída registrada de 8 bits
+    output wire [7:0] nQ      // Saída invertida de 8 bits
+);
+
+    // Instanciando 8 vezes o módulo FlipFlopDATA no formato solicitado.
+    FlipFlopDATA ff_bit0(D(D[0]), CLK(CLK), Q(Q[0]), nQ(nQ[0]));
+    FlipFlopDATA ff_bit1(D(D[1]), CLK(CLK), Q(Q[1]), nQ(nQ[1]));
+    FlipFlopDATA ff_bit2(D(D[2]), CLK(CLK), Q(Q[2]), nQ(nQ[2]));
+    FlipFlopDATA ff_bit3(D(D[3]), CLK(CLK), Q(Q[3]), nQ(nQ[3]));
+    FlipFlopDATA ff_bit4(D(D[4]), CLK(CLK), Q(Q[4]), nQ(nQ[4]));
+    FlipFlopDATA ff_bit5(D(D[5]), CLK(CLK), Q(Q[5]), nQ(nQ[5]));
+    FlipFlopDATA ff_bit6(D(D[6]), CLK(CLK), Q(Q[6]), nQ(nQ[6]));
+    FlipFlopDATA ff_bit7(D(D[7]), CLK(CLK), Q(Q[7]), nQ(nQ[7]));
+
+endmodule
+
+module Registrador8BIT_PALAVRA_ACUMULADOR (
+    input  wire [7:0] D,      // Entrada de dados de 8 bits
+    input  wire       CLK,    // Sinal de clock (compartilhado)
+    output wire [7:0] Q,      // Saída registrada de 8 bits
+    output wire [7:0] nQ      // Saída invertida de 8 bits
+);
+
+    // Instanciando 8 vezes o módulo FlipFlopDATA no formato solicitado.
+    FlipFlopDATA ff_bit0(D(D[0]), CLK(CLK), Q(Q[0]), nQ(nQ[0]));
+    FlipFlopDATA ff_bit1(D(D[1]), CLK(CLK), Q(Q[1]), nQ(nQ[1]));
+    FlipFlopDATA ff_bit2(D(D[2]), CLK(CLK), Q(Q[2]), nQ(nQ[2]));
+    FlipFlopDATA ff_bit3(D(D[3]), CLK(CLK), Q(Q[3]), nQ(nQ[3]));
+    FlipFlopDATA ff_bit4(D(D[4]), CLK(CLK), Q(Q[4]), nQ(nQ[4]));
+    FlipFlopDATA ff_bit5(D(D[5]), CLK(CLK), Q(Q[5]), nQ(nQ[5]));
+    FlipFlopDATA ff_bit6(D(D[6]), CLK(CLK), Q(Q[6]), nQ(nQ[6]));
+    FlipFlopDATA ff_bit7(D(D[7]), CLK(CLK), Q(Q[7]), nQ(nQ[7]));
+
+endmodule
+
+module Registrador8BIT_ESTRUTURAL (
+    input  wire [7:0] D,      // Entrada de dados de 8 bits
+    input  wire       CLK,    // Sinal de clock (compartilhado)
+    output wire [7:0] Q,      // Saída registrada de 8 bits
+    output wire [7:0] nQ      // Saída invertida de 8 bits
+);
+
+    // Instanciando 8 vezes o módulo FlipFlopDATA no formato solicitado.
+    FlipFlopDATA ff_bit0(D(D[0]), CLK(CLK), Q(Q[0]), nQ(nQ[0]));
+    FlipFlopDATA ff_bit1(D(D[1]), CLK(CLK), Q(Q[1]), nQ(nQ[1]));
+    FlipFlopDATA ff_bit2(D(D[2]), CLK(CLK), Q(Q[2]), nQ(nQ[2]));
+    FlipFlopDATA ff_bit3(D(D[3]), CLK(CLK), Q(Q[3]), nQ(nQ[3]));
+    FlipFlopDATA ff_bit4(D(D[4]), CLK(CLK), Q(Q[4]), nQ(nQ[4]));
+    FlipFlopDATA ff_bit5(D(D[5]), CLK(CLK), Q(Q[5]), nQ(nQ[5]));
+    FlipFlopDATA ff_bit6(D(D[6]), CLK(CLK), Q(Q[6]), nQ(nQ[6]));
+    FlipFlopDATA ff_bit7(D(D[7]), CLK(CLK), Q(Q[7]), nQ(nQ[7]));
+
+endmodule
+
+
+module Subtrator8(
+    input [7:0] A,
+    input [7:0] B,
+    input Bi,
+    output [7:0] Diff,
+    output Bo
+);
+    wire b1, b2, b3, b4, b5, b6, b7;
+
+    // Instâncias usando conexão por posição
+    FullSub fs0 (A[0], B[0], Bi, Diff[0], b1);
+    FullSub fs1 (A[1], B[1], b1, Diff[1], b2);
+    FullSub fs2 (A[2], B[2], b2, Diff[2], b3);
+    FullSub fs3 (A[3], B[3], b3, Diff[3], b4);
+    FullSub fs4 (A[4], B[4], b4, Diff[4], b5);
+    FullSub fs5 (A[5], B[5], b5, Diff[5], b6);
+    FullSub fs6 (A[6], B[6], b6, Diff[6], b7);
+    FullSub fs7 (A[7], B[7], b7, Diff[7], Bo);
+    
+endmodule
+
+
+module Somador8(
+	input[7:0] A,B, 
+	input Ci, 
+	output[7:0] S, 
+	output Co
+	);
+	
+	wire [6:0] c;
+	
+	Full(A[0], B[0], Ci,c[0],S[0]);
+	Full(A[1],B[1],c[0],c[1],S[1]);
+	Full(A[2],B[2],c[1],c[2],S[2]);
+	Full(A[3],B[3],c[2], c[3], S[3]);
+	Full(A[4], B[4], c[3],c[4],S[4]);
+	Full(A[5],B[5],c[4],c[5],S[5]);
+	Full(A[6],B[6],c[5],c[6],S[6]);
+	Full(A[7],B[7],c[6], Co, S[7]);
+
+endmodule
+
